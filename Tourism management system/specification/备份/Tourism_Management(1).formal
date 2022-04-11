@@ -1,0 +1,171 @@
+feature Register;
+module Register;
+    consts
+    types
+        Customer = composed of
+                user_id : seq of nato name:Ful1Name tel :seq of nat0
+                pass_no: seq of nat0 sex: bool
+                status:{<Login>,<Logout>}
+                end;
+        CustomerList=set of Customer;
+    var
+        CustomerDB:CustomerList;
+    inv
+        forall[x:RoomNo]1<= x<= 100;
+        forall[x: dom(rlist)] rlist(x).status =<Reserved>
+        or rlist(x).status=<Check In>;
+    process Register(register_request:Customer)register_signal:bool
+        ext wr CustomerDB
+        pre true
+        post
+        if customer.user_id = register_request.user_id
+        then register_signal = true
+        if customer.user_id != register_request.user_id
+        then register_signal = false
+    end_process;
+end_module;
+
+feature UpdateProfie;
+module UpdateProfie;
+    consts
+    types
+        Customer = composed of
+                user_id : seq of nato name:Ful1Name tel :seq of nat0
+                pass_no: seq of nat0 sex: bool
+                status:{<Login>,<Logout>}
+                end;
+        CustomerList=set of Customer;
+    var
+        CustomerDB:CustomerList;
+    inv
+        forall[x:RoomNo]1<= x<= 100;
+        forall[x: dom(rlist)] rlist(x).status =<Reserved>
+        or rlist(x).status=<Check In>;
+    process UpdateProfie(update_profile_request:Customer)update_signal:bool
+        ext wr CustomerDB
+        pre true
+        post
+        if exists! ~customer inset CustomerDB
+        then update_signal= true
+        if ~customer.user_id = update_profile_request.user_id and ~customer.pass_no=update_profile_request.pass_no 
+        then update_signal = true
+        if exists! update_profile_request.user_id
+        then update_signal= true
+    end_process;
+end_module;
+
+feature ReserveforBus;
+module ReserveforBus;
+    consts
+    types
+            BusPlanList =set of BustPlan;
+            BusContractList = map CustomerWithRes to BusPlan; 
+    var
+        BusPlanDB:BusPlanList;
+    inv
+        
+    process MakeBusPlan(reserve_for_bus_request:Customer:Customer)bus_plan:BusPlan,user_id: seq of nato
+        ext rd BusPlanDB
+        pre true
+        post
+        if customer.user_id = reserve_for_bus_request.user_id
+        then bus_plan -> ~bus_plan,user_id-> ~user_id
+    end_process;
+
+    process OrganizeBusContract(bus_plan:BusPlan,user_id: seq of nato)make_contract:BusContractList 
+        ext rd BusPlanDB
+        ext rd BusContractDB
+        pre true
+        post
+        if bus_plan = ~bus_plan , user_id= ~user_id
+        then  make_contract = Make_Contract(bus_plan,user_id) 
+    end_process;
+
+    process ConfirmBusContract(make_contract:BusContractList) bus_reservation_result:BusPlanList ,bus_confirmation_signal:signal
+        ext wd BusContractDB
+        ext rd BusContractDB
+        pre true
+        post
+        if make_contract in make_contract 
+        then  bus_reservation_result = Bus_Reservation(bus_plan,user_id),bus_confirmation_signal = true 
+    end_process;
+end_module;
+
+feature ReserveforFlight;
+module ReserveforFlight;
+    consts
+    types
+            FlightPlanList =set of FlightPlan;
+            FlightContractList = map CustomerWithRes to FlightPlan; 
+    var
+        FlightPlanDB:FlightPlanList;
+    inv
+        
+    process MakeFlightPlan(reserve_for_flight_request:Customer:Customer)flight_plan:FlightPlan,user_id: seq of nato
+        ext rd FlightPlanDB
+        pre true
+        post
+        if customer.user_id = reserve_for_flight_request.user_id
+        then flight_plan -> ~flight_plan,user_id-> ~user_id
+    end_process;
+
+    process OrganizeFlightContract(flight_plan:FlightPlan,user_id: seq of nato)make_contract:FlightContractList 
+        ext rd FlightPlanDB
+        ext rd FlightContractDB
+        pre true
+        post
+        if flight_plan = ~flight_plan , user_id= ~user_id
+        then  make_contract = Make_Contract(flight_plan,user_id) 
+    end_process;
+
+    process ConfirmFlightContract(make_contract:FlightContractList) flight_reservation_result:FlightPlanList ,flight_confirmation_signal:signal
+        ext wd FlightContractDB
+        ext rd FlightContractDB
+        pre true
+        post
+        if make_contract in make_contract 
+        then  flight_reservation_result = Flight_Reservation(flight_plan,user_id),flight_confirmation_signal = true 
+    end_process;
+end_module;
+
+feature ReserveforHotel;
+module ReserveforHotel;
+    consts
+    types
+            HotelPlanList =set of HotelPlan;
+            HotelContractList = map CustomerWithRes to HotelPlan; 
+    var
+        HotelPlanDB:HotelPlanList;
+    inv
+        
+    process MakeHotelPlan(reserve_for_hotel_request:Customer:Customer)hotel_plan:HotelPlan,user_id: seq of nato
+        ext rd HotelPlanDB
+        pre true
+        post
+        if customer.user_id = reserve_for_hotel_request.user_id
+        then hotel_plan -> ~hotel_plan,user_id-> ~user_id
+    end_process;
+
+    process OrganizeHotelContract(hotel_plan:HotelPlan,user_id: seq of nato)make_contract:HotelContractList 
+        ext rd HotelPlanDB
+        ext rd HotelContractDB
+        pre true
+        post
+        if hotel_plan = ~hotel_plan , user_id= ~user_id
+        then  make_contract = Make_Contract(hotel_plan,user_id) 
+    end_process;
+
+    process ConfirmHotelContract(make_contract:HotelContractList) hotel_reservation_result:HotelPlanList ,hotel_confirmation_signal:signal
+        ext wd HotelContractDB
+        ext rd HotelContractDB
+        pre true
+        post
+        if make_contract in make_contract 
+        then  hotel_reservation_result = Hotel_Reservation(hotel_plan,user_id),hotel_confirmation_signal = true 
+    end_process;
+end_module;
+
+
+
+
+

@@ -1,0 +1,119 @@
+feature ((ReserveforFlight,ReserveforBus,ReserveforHotel),(Login,Register,Logout));
+module ((ReserveforFlight,ReserveforBus,ReserveforHotel),(Login,Register,Logout));
+	consts
+		
+	types
+		FlightPlanList = set of FlightPlan;
+		FlightContractList = map CustomerWithRes to FlightPlan;
+		BusPlanList = set of BustPlan;
+		BusContractList = map CustomerWithRes to BusPlan;
+		HotelPlanList = set of HotelPlan;
+		HotelContractList = map CustomerWithRes to HotelPlan;
+		Customer = composed of			user_id : seq of nat0
+			pass_no: seq of nat0
+			sex: bool
+			status:{<Login>,<Logout>}
+			name:Ful1Name
+			tel :seq of nat0
+		end;
+		CustomerList = set of Customer;
+	var
+		BusPlanDB:BusPlanList;
+		CustomerDB:CustomerList;
+	inv
+		forall[x:RoomNo]1<= x<= 100;
+		forall[x: dom(rlist)] rlist(x).status =<Reserved>
+		or rlist(x).status=<Check In>;
+		foral1[x:RoomNo]1<= x<= 100;
+		foralllx: dom(rlist rlist(x.status =<Reserved> or rlist(x.status=<Check In>;
+	process MakeFlightPlan(reserve_for_flight_request:Customer)flight_plan:FlightPlan,user_id: seq of nato
+		ext wr 
+		pre true
+		post
+			if customer.user_id = reserve_for_flight_request.user_id
+			then flight_plan -> ~flight_plan,user_id-> ~user_id
+	end_process;
+	process OrganizeFlightContract(flight_plan:FlightPlan,user_id: seq of nato)make_contract:FlightContractList 
+		ext wr 
+		pre true
+		post
+			if flight_plan = ~flight_plan , user_id= ~user_id
+			then  make_contract = Make_Contract(flight_plan,user_id) 
+	end_process;
+	process ConfirmFlightContract(make_contract:FlightContract)flight_reservation_result:FlightPlanList ,flight_confirmation_signal:signal
+		ext wr 
+		pre true
+		post
+			if make_contract in make_contract 
+			then  flight_reservation_result = Flight_Reservation(flight_plan,user_id),flight_confirmation_signal = true 
+	end_process;
+	process MakeBusPlan(reserve_for_bus_request:Customer)bus_plan:BusPlan,user_id: seq of nato
+		ext wr 
+		pre true
+		post
+			if customer.user_id = reserve_for_bus_request.user_id
+			then bus_plan -> ~bus_plan,user_id-> ~user_id
+	end_process;
+	process OrganizeBusContract(bus_plan:BusPlan,user_id: seq of nato)make_contract:BusContractList 
+		ext wr 
+		pre true
+		post
+			if bus_plan = ~bus_plan , user_id= ~user_id
+			then  make_contract = Make_Contract(bus_plan,user_id) 
+	end_process;
+	process ConfirmBusContract(make_contract:BusContract)bus_reservation_result:BusPlanList ,bus_confirmation_signal:signal
+		ext wr 
+		pre true
+		post
+			if make_contract in make_contract 
+			then  bus_reservation_result = Bus_Reservation(bus_plan,user_id),bus_confirmation_signal = true 
+	end_process;
+	process MakeHotelPlan(reserve_for_hotel_request:Customer)hotel_plan:HotelPlan,user_id: seq of nato
+		ext wr 
+		pre true
+		post
+			if customer.user_id = reserve_for_hotel_request.user_id
+			then hotel_plan -> ~hotel_plan,user_id-> ~user_id
+	end_process;
+	process OrganizeHotelContract(hotel_plan:HotelPlan,user_id: seq of nato)make_contract:HotelContractList 
+		ext wr 
+		pre true
+		post
+			if hotel_plan = ~hotel_plan , user_id= ~user_id
+			then  make_contract = Make_Contract(hotel_plan,user_id) 
+	end_process;
+	process ConfirmHotelContract(make_contract:HotelContract)hotel_reservation_result:HotelPlanList ,hotel_confirmation_signal:signal
+		ext wr 
+		pre true
+		post
+			if make_contract in make_contract 
+			then  hotel_reservation_result = Hotel_Reservation(hotel_plan,user_id),hotel_confirmation_signal = true 
+	end_process;
+	process Login(login_request:Customer)login_signal:bool
+		ext wr 
+		pre true
+		post
+			if customer.user_id = login_request.user_id
+			then login_signal = true
+			if customer.user_id != login_request.user_id
+			then login_signal = false
+	end_process;
+	process Register(register_request:Customer)register_signal:bool
+		ext wr 
+		pre true
+		post
+			customer.user_id = register_request.user_id then CustomerDB=~CustomerDB union {register_request}
+			register_signal = true
+			customer.user_id != register_request.user_id
+			register_signal = false
+	end_process;
+	process Logout(logout_request:Customer)logout_signal:bool
+		ext wr 
+		pre true
+		post
+			if customer.user_id = logout_request.user_id
+			then logout_signal = true
+			if customer.user_id !=logout_request.user_id
+			then logout_signal = false
+	end_process;
+end_module;

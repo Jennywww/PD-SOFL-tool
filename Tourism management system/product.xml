@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	    
+	<properties>
+		        <graphics key="legendposition" value="830,60"/>
+		        <graphics key="legendautolayout" value="false"/>
+		        <graphics key="showshortnames" value="false"/>
+		        <graphics key="layout" value="horizontal"/>
+		        <graphics key="showcollapsedconstraints" value="true"/>
+		        <graphics key="legendhidden" value="false"/>
+		        <graphics key="layoutalgorithm" value="1"/>
+		    
+	</properties>
+	    
+	<struct>
+		        
+		<and abstract="true" mandatory="true" name="Tourism_Management">
+			            
+			<description>
+				Tourism_Management=ReserveforFlight*ReserveForBus*ReserveforHotel*Login*Register*Logout
+			</description>
+			            
+			<and mandatory="true" name="Reserve_for_Tour">
+				                <feature mandatory="true" name="ReserveforFlight"/>
+				                <feature mandatory="true" name="ReserveforBus"/>
+				                <feature mandatory="true" name="ReserveforHotel"/>
+				            
+			</and>
+			            <feature mandatory="true" name="Login"/>
+			            <feature mandatory="true" name="Register"/>
+			            <feature mandatory="true" name="Logout"/>
+			        
+		</and>
+		    
+	</struct>
+</featureModel>

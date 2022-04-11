@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<featureFormaldes> 
+
+  <feature name="Register"> 
+    <module name="Register">  
+      <consts></consts>  
+      <types>
+          Customer = composed of
+              user_id : seq of nato name:Ful1Name tel :seq of nat0
+              pass_no: seq of nat0 sex: bool
+              status:{<Login>,<Logout>}
+              end;
+          CustomerList=set of Customer; 
+      </types>  
+      <var>
+        CustomerDB:CustomerList;
+      </var>
+      <inv>
+        forall[x:RoomNo]1<= x<= 100;
+        forall[x: dom(rlist)] rlist(x).status =<Reserved>
+        or rlist(x).status=<Check In>;
+      </inv>
+      <process name="Register"> 
+        <inputs>register_request:Customer</inputs>  
+        <outputs>register_signal:bool</outputs> 
+        <ext wr="CustomerDB"/>
+        <pre>true</pre>  
+        <post>
+          if (exists! customer inset CustomerDB |
+          (customer.user_id = register_request.user_id and register_signal = false))
+          then CustomerDB=~CustomerDB union {register_request}
+          register_request -> register_signal = true
+        </post>  
+      </process>
+	  </module>	
+  </feature> 
+
+  <feature name="Login"> 
+    <module name="Login">  
+      <consts></consts>  
+           <types>
+          Customer = composed of
+              user_id : seq of nato name:Ful1Name tel :seq of nat0
+              pass_no: seq of nat0 sex: bool
+              status:{<Login>,<Logout>}
+              end;
+          CustomerList=set of Customer; 
+      </types>  
+      <var>
+        CustomerDB:CustomerList;
+      </var>
+      <inv>
+        forall[x:RoomNo]1<= x<= 100;
+        forall[x: dom(rlist)] rlist(x).status =<Reserved>
+        or rlist(x).status=<Check In>;
+      </inv>
+      <process name="Login"> 
+        <inputs>login_request:Customer</inputs>  
+        <outputs>login_signal:bool</outputs> 
+        <ext wr="CustomerDB"/>
+        <pre>true</pre>  
+        <post>
+          if (customer.user_id = login_request.user_id)
+          then login_request -> login_signal = true
+          else login_request -> login_signal = false
+        </post>  
+      </process>
+	  </module>	
+  </feature> 
+
+  <feature name="UpdateProfie"> 
+    <module name="UpdateProfie">  
+      <consts></consts>  
+           <types>
+          Customer = composed of
+              user_id : seq of nato name:Ful1Name tel :seq of nat0
+              pass_no: seq of nat0 sex: bool
+              status:{<Login>,<Logout>}
+              end;
+          CustomerList=set of Customer; 
+      </types>  
+      <var>
+        CustomerDB:CustomerList;
+      </var>
+      <inv>
+        forall[x:RoomNo]1<= x<= 100;
+        forall[x: dom(rlist)] rlist(x).status =<Reserved>
+        or rlist(x).status=<Check In>;
+      </inv>
+      <process name="UpdateProfie"> 
+        <inputs>update_profile_request:Customer</inputs>  
+        <outputs>update_signal:bool</outputs> 
+        <ext wr="CustomerDB"/>
+        <pre>true</pre>  
+        <post>
+         (exists! ~customer inset CustomerDB|
+         ~customer.user_id = update_profile_request.user_id and ~customer.pass_no=update_profile_request.pass_no and customer =update_profile_request and update_signal = true))
+         update_profile_request -> update_signal= false
+        </post>  
+      </process>
+	  </module>	
+  </feature> 
+  
+  <feature name="ReserveforBus"> 
+    <module name="ReserveforBus">  
+    <consts></consts>  
+    <types>
+		BusPlanList =set of BustPlan;
+		BusContractList = map CustomerWithRes to BusPlan; 
+    </types>  
+    <inv></inv>
+    <process name="MakeBusPlan"> 
+        <inputs>reserve_for_bus_request:Customer</inputs>  
+        <outputs>bus_plan:BusPlan,user_id: seq of nato</outputs> 
+      <ext rd="BusPlanDB"/>	
+        <pre>true</pre>  
+        <post>
+          if (customer.user_id = reserve_for_bus_request.user_id) 
+          then reserve_for_bus_request = bus_plan and user_id   
+        </post>  
+    </process>
+    
+    <process name="OrganizeBusContract"> 
+        <inputs>bus_plan:BusPlan,user_id: seq of nato</inputs>  
+        <outputs>make_contract:BusContractList </outputs> 
+      <ext rd="CustomerDB"/>	
+      <ext rd="BusContractDB"/>
+        <pre>true</pre>  
+        <post>
+          if (customer.user_id = user_id) 
+          bus_plan and user_id -> make_contract 
+        </post>  
+    </process>
+    
+    <process name="ConfirmBusContract"> 
+        <inputs>make_contract:BusContract</inputs>  
+        <outputs>bus_reservation_result:BusPlanList ,bus_confirmation_signal:signal</outputs> 
+      <ext rd="BusContractDB"/>
+      <ext wd="BusContractDB"/>
+        <pre>true</pre>  
+        <post>
+          if make_contract
+          then make_contract -> bus_reservation_result,busconfirmation_signal = "reserve success!"
+        </post>  
+    </process>	
+    </module>
+  </feature>
+
+  <feature name="ReserveforFlight"> 
+    <module name="ReserveforFlight">  
+    <consts></consts>  
+    <types>
+		FlightPlanList =set of FlightPlan;
+		FlightContractList = map CustomerWithRes to FlightPlan; 
+    </types>  
+    <inv></inv>
+    <process name="MakeFlightPlan"> 
+        <inputs>reserve_for_flight_request:Customer</inputs>  
+        <outputs>flight_plan:FlightPlan,user_id: seq of nato</outputs> 
+      <ext rd="FlightPlanDB"/>	
+        <pre>true</pre>  
+        <post>
+          if (customer.user_id = reserve_for_flight_request.user_id) 
+          then reserve_for_flight_request -> flight_plan and user_id   
+        </post>  
+    </process>
+    
+    <process name="OrganizeFlightContract"> 
+        <inputs>flight_plan:FlightPlan,user_id: seq of nato</inputs>  
+        <outputs>make_contract:FlightContractList </outputs> 
+      <ext rd="CustomerDB"/>	
+      <ext rd="FlightContractDB"/>
+        <pre>true</pre>  
+        <post>
+          if (customer.user_id = user_id) 
+          flight_plan and user_id -> make_contract 
+        </post>  
+    </process>
+    
+    <process name="ConfirmFlightContract"> 
+        <inputs>make_contract:FlightContract</inputs>  
+        <outputs>flight_reservation_result:FlightPlanList ,flight_confirmation_signal:signal</outputs> 
+      <ext rd="FlightContractDB"/>
+      <ext wd="FlightContractDB"/>
+        <pre>true</pre>  
+        <post>
+          if make_contract
+          then  make_contract -> flight_reservation_result,flight_confirmation_signal = "reserve success!"
+        </post>  
+    </process>	
+    </module>
+  </feature>
+
+   <feature name="ReserveforHotel"> 
+    <module name="ReserveforHotel">  
+    <consts></consts>  
+    <types>
+		HotelPlanList =set of HotelPlan;
+		HotelContractList = map CustomerWithRes to HotelPlan; 
+    </types>  
+    <inv></inv>
+    <process name="MakeHotelPlan"> 
+        <inputs>reserve_for_hotel_request:Customer</inputs>  
+        <outputs>hotel_plan:HotelPlan,user_id: seq of nato</outputs> 
+      <ext rd="HotelPlanDB"/>	
+        <pre>true</pre>  
+        <post>
+          if (customer.user_id = reserve_for_hotel_request.user_id) 
+          then reserve_for_hotel_request = hotel_plan and user_id   
+        </post>  
+    </process>
+    
+    <process name="OrganizeHotelContract"> 
+        <inputs>hotel_plan:HotelPlan,user_id: seq of nato</inputs>  
+        <outputs>make_contract:HotelContractList </outputs> 
+      <ext rd="CustomerDB"/>	
+      <ext rd="HotelContractDB"/>
+        <pre>true</pre>  
+        <post>
+          if (customer.user_id = user_id) 
+          hotel_plan and user_id -> make_contract 
+        </post>  
+    </process>
+    
+    <process name="ConfirmHotelContract"> 
+        <inputs>make_contract:HotelContract</inputs>  
+        <outputs>hotel_reservation_result:HotelPlanList ,hotel_confirmation_signal:signal</outputs> 
+      <ext rd="HotelContractDB"/>
+      <ext wd="HotelContractDB"/>
+        <pre>true</pre>  
+        <post>
+          if make_contract
+          then  make_contract -> hotel_reservation_result,hotel_confirmation_signal = "reserve success!"
+        </post>  
+    </process>	
+    </module>
+  </feature>
+
+  <feature name="Logout"> 
+    <module name="Logout">  
+      <consts></consts>  
+      <types>
+          Customer = composed of
+              user_id : seq of nato name:Ful1Name tel :seq of nat0
+              pass_no: seq of nat0 sex: bool
+              status:{Login>,<Logout>}
+              end;
+          CustomerList=set of Customer; 
+      </types>  
+      <var>
+        CustomerDB:CustomerList;
+      </var>
+      <inv>
+        foral1[x:RoomNo]1<= x<= 100;
+        foralllx: dom(rlist rlist(x.status =<Reserved> or rlist(x.status=<Check In>;
+      </inv>
+      <process name="Logout"> 
+        <inputs>logout_request:Customer</inputs>  
+        <outputs>logout_signal:bool</outputs> 
+        <ext wr="CustomerDB"/>
+        <pre>true</pre>  
+        <post>
+          if  logout_request
+          then logout_request -> logout_signal = true
+        </post>  
+      </process>
+	  </module>	
+  </feature> 
+
+</featureFormaldes>
