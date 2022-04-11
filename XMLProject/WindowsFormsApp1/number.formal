@@ -1,0 +1,220 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+<featureFormaldes> 
+  <feature name="A"> 
+    <module name="A">  
+    <consts></consts>  
+    <types></types>  
+	<inv></inv>
+    <process name="A"> 
+      <inputs>a:int|b:int</inputs>  
+      <outputs>c:int</outputs> 
+      <pre>true</pre>  
+      <post>
+		if bound(a)then c=2*a;
+		else bound(b)then c=-b;
+	  </post>  
+	</process>
+	<process name="B"> 
+      <inputs>c:int,d:int,e:int</inputs>  
+      <outputs>f:int|g:int</outputs> 
+      <pre>true</pre>  
+      <post>
+		if c+d+e>0 f=c+d+e;
+		else g=c-d-e;
+	  </post>  
+	</process>
+	<process name="C"> 
+      <inputs>f:int</inputs>  
+      <outputs>h:int|i:int</outputs> 
+      <pre>true</pre>  
+      <post>
+		if f>0 i=3*f;
+		else j=10-f;
+	  </post>  
+	</process>
+	<process name="D"> 
+      <inputs>g:int</inputs>  
+      <outputs>j:int</outputs> 
+      <pre>true</pre>  
+      <post>
+		 j=3+2*g;
+	  </post>  
+	</process>
+	</module>	
+  </feature> 
+  
+  <feature name="E"> 
+    <module name="E">  
+    <consts></consts>  
+    <types></types>  
+	<inv></inv>
+    <process name="E"> 
+      <inputs>j:int</inputs>  
+      <outputs>k:int|i:int</outputs>  
+      <pre>true</pre>  
+      <post>
+	  if j>0 k=j-2;
+	  eles l=2*j;
+	  </post>  
+	</process>
+	<process name="F"> 
+      <inputs>x:int|k:int</inputs>  
+      <outputs>m:int|n:int</outputs>  
+      <pre>true</pre>  
+      <post>
+	  if k>0 m=k+2;
+	  if x>0 m=x+1;
+	  else n=x-1;
+	  </post>  
+	</process>
+	<process name="G"> 
+      <inputs>l:int</inputs>  
+      <outputs>o:int|p:int</outputs>  
+      <pre>true</pre>  
+      <post>
+	  if l>0 o=l-2;
+	  eles p=2*l;
+	  </post>  
+	</process>
+	</module>
+  </feature> 
+  
+  <feature name="H"> 
+    <module name="H">
+	<consts></consts>  
+    <types></types>  
+	
+	<process name="H"> 
+	<inputs>o:int</inputs>
+    <outputs>q:int</outputs>
+      <pre>true</pre>  
+      <post>
+		q=o+1;
+	  </post>  
+	</process>	
+	<process name="I"> 
+	<inputs>q:int</inputs>
+    <outputs>r:int|s:int</outputs>
+      <pre>true</pre>  
+      <post>
+		if(q>0) r=q-1;
+		else s=q+1;
+	  </post>  
+	</process>
+	</module>	
+  </feature>  
+   
+  <feature name="J"> 
+    <module name="J">  
+    <consts></consts>  
+    <types></types>  
+	<inv></inv>
+	<process name="J"> 
+      <inputs>m:int|i:int</inputs>  
+      <outputs>u:int|t:int </outputs> 
+      <pre>true</pre>  
+      <post>
+	  if(m>0) t=m-1;
+	  else u=m*3;
+	  if(i>0) u=i+1;
+	  </post>  
+	</process>
+	</module>	
+  </feature> 
+  
+  <feature name="L"> 
+    <module name="L">  
+    <consts></consts>  
+    <types>
+		FlightPlanList =set of FlightPlan;
+		FlightContractList = map CustomerWithRes to FlightPlan; 
+	</types>  
+	<inv></inv>
+	<process name="MakeFlightPlan"> 
+      <inputs>reserve_for_flight_request:Customer,account:Customer</inputs>  
+      <outputs>flight_plan:FlightPlan,user_id: seq of nato</outputs> 
+	  <ext rd="FlightPlanDB"/>	
+      <pre>true</pre>  
+      <post></post>  
+	</process>
+	
+	<process name="OrganizeFlightContract"> 
+      <inputs>flight_plan:FlightPlan,user_id: seq of nato</inputs>  
+      <outputs>make_contract:FlightContractList </outputs> 
+	  <ext rd="CustomerDB"/>	
+	  <ext rd="FlightContractDB"/>
+      <pre>true</pre>  
+      <post></post>  
+	</process>
+	
+	<process name="ConfirmFlightContract"> 
+      <inputs>make_contract:FlightContract</inputs>  
+      <outputs>flight_reservation_result:FlightPlanList ,flight_confirmation_signal:signal</outputs> 
+	  <ext rd="FlightContractDB"/>
+	  <ext wd="FlightContractDB"/>
+      <pre>true</pre>  
+      <post></post>  
+	</process>	
+	</module>
+ </feature> 
+  
+  <feature name="M"> 
+    <module name="M">  
+    <consts></consts>  
+    <types>
+	</types>  
+	<inv></inv>
+	<process name="M"> 
+      <inputs>c:int</inputs>  
+      <outputs>d:int</outputs> 
+      <pre>true</pre>  
+      <post></post>  
+	</process>
+	</module>
+ </feature> 
+ 
+  <feature name="N"> 
+    <module name="N">  
+    <consts></consts>  
+    <types>
+	</types>  
+	<inv></inv>
+	<process name="N"> 
+      <inputs>d:int</inputs>  
+      <outputs>e:int</outputs> 
+      <pre>true</pre>  
+      <post></post>  
+	</process>
+	</module>
+ </feature>
+ 
+  <feature name="T"> 
+    <module name="T">  
+    <consts></consts>  
+    <types>
+	</types>  
+	<inv></inv>
+	<process name="T"> 
+      <inputs>e:int</inputs>  
+      <outputs>f:int</outputs> 
+      <pre>true</pre>  
+      <post></post>  
+	</process>
+	</module>
+ </feature>
+ 
+ <feature name="X"> 
+    <module name="X">  
+    <consts></consts>  
+    <types>
+	</types>  
+	<inv></inv>
+	<process name="X"> 
+      <inputs>f:int</inputs>  
+      <outputs>g:int</outputs> 
+      <pre>true</pre>  
+      <post></post>  
+	</process>
+	</module>
+ </feature>
+</featureFormaldes>

@@ -1,0 +1,17 @@
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.csprojAssemblyReference.cache
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.Form1.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.XMLTree.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.csproj.GenerateResource.cache
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.csproj.CoreCompileInputs.cache
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.Properties.Resources.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\bin\Debug\XMLFormsApp.exe.config
+D:\XMLProject\XMLProject\WindowsFormsApp1\bin\Debug\XMLFormsApp.exe
+D:\XMLProject\XMLProject\WindowsFormsApp1\bin\Debug\XMLFormsApp.pdb
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.exe
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.pdb
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.FileTree.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.ProcessForm.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.DescriptionForm.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.ScenariosForm.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.FeaturePage.resources
+D:\XMLProject\XMLProject\WindowsFormsApp1\obj\Debug\XMLFormsApp.OrderForm.resources
